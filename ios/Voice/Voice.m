@@ -40,7 +40,10 @@
     self.audioSession = [AVAudioSession sharedInstance];
     [self.audioSession setCategory:AVAudioSessionCategoryRecord error:&audioSessionError];
 
-
+    if ([self.audioSession recordPermission] == AVAudioSessionRecordPermissionDenied) {
+        [self sendResult:RCTMakeError(@"User denied access to microphone", nil, nil) :nil :nil :nil];
+        return;
+    }
     if (audioSessionError != nil) {
         [self sendResult:RCTMakeError([audioSessionError localizedDescription], nil, nil) :nil :nil :nil];
         return;
